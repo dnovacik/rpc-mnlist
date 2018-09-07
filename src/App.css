@@ -4,12 +4,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a {
-  text-decoration: none;
-}
-
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+.loader-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
 }
 
 /* REUSABLES */
@@ -30,10 +32,6 @@ a {
   padding-top: 3.125rem;
 }
 
-.fs-20 {
-  font-size: 20px;
-}
-
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -52,11 +50,8 @@ a {
 section, footer {
   position: relative;
   margin: 0 auto;
-  overflow: hidden;
-}
-
-section {
   padding: 6.25rem 0;
+  overflow: hidden;
 }
 
 .pattern::before {
@@ -103,10 +98,6 @@ section {
 }
 
 .text-white {
-  color: #fff;
-}
-
-.text-white a:not(.btn) {
   color: #fff;
 }
 
@@ -172,20 +163,6 @@ ul.socials, ul.nav {
 ul.socials li {
   float: left;
   list-style: none;
-}
-
-.socials a {
-  -webkit-transition: all 0.2s;
-  -moz-transition: all 0.2s;
-  transition: all 0.2s;
-  -webkit-transition-delay: 0s;
-  -moz-transition-delay: 0s;
-  transition-delay: 0s;
-  display: block;
-  line-height: 1em;
-  width: 1em;
-  padding: 1rem;
-  border-radius: 50%;
 }
 
 .nav li {

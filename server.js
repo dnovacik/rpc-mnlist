@@ -2,11 +2,9 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
 var compression = require("compression");
+require('dotenv').config();
 var jayson = require("jayson");
 var app = express();
-
-// COIN CFG
-const { coin } = require("./src/config/config");
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -27,9 +25,9 @@ app.use(function (req, res, next) {
 
 // RPC
 var rpcClient = jayson.client.http({
-    hostname: coin.rpchost,
-    port: coin.rpcport,
-    auth: `${coin.rpcuser}:${coin.rpcpass}`
+    hostname: process.env.RPC_HOST,
+    port: process.env.RPC_PORT,
+    auth: `${process.env.RPC_USER}:${process.env.RPC_PASS}`
 });
 
 // API
@@ -37,6 +35,18 @@ app.get("/", function (req, res) {
     res.setHeader("Cache-Control", "public, max-age=86400");
     res.setHeader("Expires", new Date(Date.now() + 86400).toUTCString());
     res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.get("/coinsettings", function (req, res) {
+    var coin = {
+        name: process.env.COIN_NAME,
+        icon: process.env.COIN_ICON_URL,
+        refresh: process.env.REFRESH_TIME,
+        masternodesPerPage: process.env.MASTERNODES_PER_PAGE,
+        color: process.env.MAIN_COLOR
+    };
+
+    res.send(coin);
 });
 
 app.get("/getcoininfo", function (req, res) {
