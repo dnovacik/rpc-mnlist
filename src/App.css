@@ -8,6 +8,13 @@ body {
   box-sizing: border-box;
 }
 
+::placeholder {
+  font-family: 'Montserrat', sans-serif;
+  color: gray;
+  opacity: 0.8;
+  font-style: italic;
+}
+
 .loader-container {
   position: fixed;
   top: 50%;
@@ -136,6 +143,27 @@ section, footer {
 
 .masternodes-table tr:nth-of-type(odd):not(.table-header) {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+.search-by {
+  float: right;
+}
+
+.form-control {
+  display: block;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  padding: 0.9375rem 0.9375rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  outline: none;
+  color: #151515;
+  background-color: #fff;
+  background-clip: padding-box;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 td.left {

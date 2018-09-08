@@ -12,7 +12,8 @@ class MasternodeList extends Component {
         this.state = {
             elementsPerPage: props.masternodesOnPage,
             currentPage: 1,
-            mainColor: props.mainColor
+            mainColor: props.mainColor,
+            searchBy: ''
         }
     }
 
@@ -34,6 +35,10 @@ class MasternodeList extends Component {
         });
     }
 
+    handleSearchChange = (event) => {
+        this.setState({searchBy: event.target.value})
+    }
+
     renderLoader() {
         return (
             <LoaderContainer mainColor={this.state.mainColor} />
@@ -44,24 +49,28 @@ class MasternodeList extends Component {
         let hrefStyle = {
             color: this.state.mainColor,
             fontWeight: 'bold',
-            pointerEvents: 'all'
+            pointerEvents: 'all',
+            cursor: 'pointer'
         }
-
+        let maxPages = Math.ceil(mnCount / this.state.elementsPerPage);
         let previousDisabled = this.state.currentPage === 1;
         let startNumber = ((this.state.currentPage - 1) * this.state.elementsPerPage) + 1;
         let endNumber = this.state.currentPage * this.state.elementsPerPage;
+        let nextDisabled = this.state.currentPage === maxPages;
+        
+        endNumber = endNumber > mnCount ? mnCount : endNumber;
 
         return (
             <tr>
                 <td colSpan='2' className='left'>
                     <a id='previous' href={null} onClick={this.handleClick}
-                        style={previousDisabled ? {pointerEvents: 'none'} : {hrefStyle}}>&lt; previous</a>
+                        style={previousDisabled ? {pointerEvents: 'none'} : hrefStyle}>&lt; previous</a>
                 </td>
                 <td colSpan='1'>
                     <span>{startNumber} - {endNumber} of {mnCount}</span>
                 </td>
                 <td colSpan='2' className='right'>
-                    <a id='next' href={null} onClick={this.handleClick} style={hrefStyle}>next &gt;</a>
+                    <a id='next' href={null} onClick={this.handleClick} style={nextDisabled ? {pointerEvents: 'none'} : hrefStyle}>next &gt;</a>
                 </td>
             </tr>
         );
@@ -79,11 +88,18 @@ class MasternodeList extends Component {
         );
     }
 
-    renderMasternodeList() {
+    renderMasternodeList(addressToFilterOn) {
         if (!this.props.masternodes.hasError) {
             const indexOfLast = this.state.currentPage * this.state.elementsPerPage;
             const indexOfFirst = indexOfLast - this.state.elementsPerPage;
-            const currentlyVisible = this.props.masternodes.data.slice(indexOfFirst, indexOfLast);
+
+            const filteredElements = addressToFilterOn !== ''
+                ?   this.props.masternodes.data.filter(mn => {
+                        return mn.addr.includes(addressToFilterOn.toString());
+                    })
+                : this.props.masternodes.data;
+
+            const currentlyVisible = filteredElements.slice(indexOfFirst, indexOfLast);
     
             const renderMasternodes = currentlyVisible.map((masternode, index) => {
                 return (
@@ -93,8 +109,8 @@ class MasternodeList extends Component {
     
             return (
                 <div className='container pb-5 pt-5'>
-                    <div>
-
+                    <div className='row'>
+                        <input className='search-by form-control' style={{border: `1px solid ${this.state.mainColor}` }} type='text' placeholder='filter by public key' value={this.state.searchBy} onChange={this.handleSearchChange} />
                     </div>
                     <table className='masternodes-table'>
                         <thead>
@@ -102,7 +118,7 @@ class MasternodeList extends Component {
                         </thead>
                         <tbody>
                             {renderMasternodes}
-                            {this.renderPageArrows(this.props.masternodes.data.length)}
+                            {this.renderPageArrows(filteredElements.length)}
                         </tbody>
                     </table>
     
@@ -121,7 +137,7 @@ class MasternodeList extends Component {
            <div>
                {(this.props.masternodes.isFetching)
                 ? this.renderLoader()
-                : this.renderMasternodeList()}
+                : this.renderMasternodeList(this.state.searchBy)}
            </div>
         );   
        }
