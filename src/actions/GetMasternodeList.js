@@ -5,7 +5,7 @@ export default async function GetMasternodeList() {
     return dispatch => {
         dispatch({ type: FETCHING_MASTERNODE_LIST})
 
-        return axios.get('/getmasternodelist')
+        return axios.get('http://localhost:4000/getmasternodelist')
             .then(res => {
                 if (res.data.errno) {
                     dispatch({ type: FETCHING_MASTERNODE_LIST_FAIL, payload: res.data })

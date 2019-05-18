@@ -21,7 +21,7 @@ class App extends Component {
   }
 
   componentWillMount = () => {
-    axios.get('/coinsettings')
+    axios.get('http://localhost:4000/coinsettings')
     .then(res => {
       this.setState({coin: res.data})
     })

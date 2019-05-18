@@ -52,6 +52,7 @@ class MasternodeList extends Component {
             pointerEvents: 'all',
             cursor: 'pointer'
         }
+        
         let maxPages = Math.ceil(mnCount / this.state.elementsPerPage);
         let previousDisabled = this.state.currentPage === 1;
         let startNumber = ((this.state.currentPage - 1) * this.state.elementsPerPage) + 1;
